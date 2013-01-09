@@ -1,0 +1,14 @@
+{% if su_state.is_active %}
+  <p>
+    Currently logged in as: <em>{{ current_user.username }} ({{ current_user.get_full_name }})</em>
+  </p>
+{% endif %}
+<form method="POST" action="{% url su-login %}?next={{ next }}">
+  <label for="user_id">Login as:</label>
+  <select name="user_id">
+    {% for user in su_state.available_users %}
+      <option value="{{ user.id }}">{{ user.username }} ({{ user.get_full_name }})</option>
+    {% endfor %}
+  </select>
+  <input type="submit" value="su!" />
+</form>

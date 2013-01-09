@@ -1,0 +1,42 @@
+{% if su_state.is_active %}
+  <div class="su-statusbar">
+    <style>
+      .su-statusbar {
+        position: fixed;
+        top: 5px;
+        right: 0;
+      }
+      .su-statusbar-hide {
+        display: inline-block;
+      }
+      .su-statusbar form {
+        display: inline-block;
+      }
+    </style>
+    <script>
+      var su_statusbar_hide_clicked = (function() {
+        var hidden = false;
+        return function() {
+          var statusbar = document.getElementsByClassName("su-statusbar")[0];
+          var hideBtn = document.getElementsByClassName("su-statusbar-hide")[0];
+          hidden = !hidden;
+          if (hidden) {
+            var logoutBtn = document.getElementsByClassName("su-statusbar-logout")[0];
+            var logoutBtnWidth = logoutBtn.offsetWidth;
+            statusbar.style.right = "-" + logoutBtnWidth + "px";
+            hideBtn.innerText = "<";
+          } else {
+            statusbar.style.right = "0";
+            hideBtn.innerText = ">";
+          }
+        };
+      })();
+    </script>
+    <button class="su-statusbar-hide" onclick="su_statusbar_hide_clicked()">&gt;</button><!--
+    --><form action="{% url su-logout %}" method="post"><!--
+      --><input type="submit"
+            value="Logout of {{ su_state.active_user.username }}"
+            class="su-statusbar-logout" /><!--
+    --></form><!--
+  --></div>
+{% endif %}

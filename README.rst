@@ -1,0 +1,115 @@
+django-switchuser
+=================
+
+``django-switchuser`` makes it easy for an administrator to switch to
+temporarily switch to another account by visiting ``/su``.
+
+
+Assumptions
+-----------
+
+Because ``django-switchuser`` was a quick project, it does make a couple
+of assumptions:
+
+* Your site uses a ``base.html`` template with a ``{% block content %}`` block.
+  If this assumption does not hold: you will need to define your own
+  ``su/login.html`` template, something like this::
+
+    {% extends "yourbase.html" %}
+    {% block yourcontent %}
+        {% include "su/login_form.html" %}
+    {% endblock %}
+
+* Any superuser is allowed to switch to any other user. If this assumption does
+  not hold: you'll need to submit a pull request... Sorry :(
+
+
+Installation
+------------
+
+1. ``pip install django-switchuser``
+2. Add a few things to ``settings.py`` (note: the ``SuStateMiddleware`` must
+   appear *after* the ``AuthenticationMiddleware``)::
+
+    INSTALLED_APPS = (
+        ...
+        "django_switchuser",
+        ...
+    )
+
+    MIDDLEWARE_CLASSES = (
+        ...
+        "django.contrib.sessions.middleware.SessionMiddleware",
+        "django.contrib.auth.middleware.AuthenticationMiddleware",
+        "django_switchuser.middleware.SuStateMiddleware",
+        ...
+    )
+
+    TEMPLATE_CONTEXT_PROCESSORS = (
+        ...
+        "django_switchuser.context_processors.su_state",
+        ...
+    )
+
+3. Add an entry to ``urls.py`` (note: you can use whatever URL you'd like;
+   ``su/`` is simply convenient)::
+
+    urlpatterns += patterns("",
+        ...
+        url(r"^su/", include("django_switchuser.urls")),
+        ...
+    )
+
+4. (Optional) Add an entry to your ``base.html`` template (don't use a
+   ``base.html``? See Assumptions_!) which will show a convenient logout
+   button::
+
+    <body>
+        ...
+        {% include "su/statusbar.html" %}
+    </body>
+
+
+Doing Your Own Thing
+====================
+
+Doing your own thing is easy. The ``SuStateMiddleware`` and ``su_state``
+context processors add a ``su_state`` attribute to the ``request`` and a
+``su_state`` variable to the template rendering context. ``su_state`` is an
+instance of ``django_switchuser.state.SuState``, and has the following
+attributes:
+
+    ``SuState.is_active()``:
+        Returns ``True`` if the current user has been switched.
+
+    ``SuState.auth_user``:
+        The original user associated with the request. For example, if the user
+        ``admin`` has switched to ``jane``, then ``su_state.auth_user`` will be
+        ``admin``.
+
+    ``SuState.active_user``:
+        The user which has been switched to, or ``None`` if no user has been
+        switched. For example, if the user ``admin`` has switched to ``jane``,
+        then ``su_state.active_user`` will be ``admin``.
+
+    ``SuState.can_su()``:
+        Returns ``True`` if the current user is allowed to switch.
+
+    ``SuState.available_users()``:
+        Returns a ``QuerySet`` of ``User`` of the users which the current user
+        is allowed to switch to.
+
+    ``SuState.set_su_user_id(su_user_id)``:
+        Switches to the user with id ``su_user_id``.
+
+    ``SuState.clear_su()``:
+        Reverts back to the original user.
+
+For example, if you don't like the default switch user bar, you could add your
+own to your ``base.html``::
+
+    {% if su_state.is_active %}
+        <a href="{% url su-logout %}">deactive {{ su.active_user.username }}</a>
+    {% elif su_state.can_su %}
+        <a href="{% url su-login %}">switch user</a>
+    {% endif %}
