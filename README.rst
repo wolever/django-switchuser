@@ -5,8 +5,8 @@ django-switchuser
 temporarily switch to another account by visiting ``/su``.
 
 
-Things to note
---------------
+Assumptions
+-----------
 
 Because ``django-switchuser`` was a quick project, it does make a couple
 of assumptions:
