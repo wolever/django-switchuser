@@ -7,14 +7,16 @@ class SuState(object):
         self._reset()
 
     def _reset(self):
+        self.old_user = None
+        self.active_user = None
         current_user = self.request.user
         old_user_id = self.request.session.get("su_auth_user_id", None)
-        if old_user_id == current_user.id and current_user.id is not None:
-            self.old_user = None
-            self.active_user = None
-        else:
-            self.old_user = User.objects.get(id=old_user_id)
-            self.active_user = current_user
+        if old_user_id and old_user_id != current_user.id:
+            try:
+                self.old_user = User.objects.get(id=old_user_id)
+                self.active_user = current_user
+            except User.DoesNotExist:
+                pass
         self.auth_user = self.old_user or current_user
 
     def is_active(self):

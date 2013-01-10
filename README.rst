@@ -5,14 +5,14 @@ django-switchuser
 temporarily switch to another account by visiting ``/su``.
 
 
-Assumptions
------------
+Things to note
+--------------
 
 Because ``django-switchuser`` was a quick project, it does make a couple
 of assumptions:
 
 * Your site uses a ``base.html`` template with a ``{% block content %}`` block.
-  If this assumption does not hold: you will need to define your own
+  *If this assumption does not hold*: you will need to define your own
   ``su/login.html`` template, something like this::
 
     {% extends "yourbase.html" %}
@@ -20,8 +20,8 @@ of assumptions:
         {% include "su/login_form.html" %}
     {% endblock %}
 
-* Any superuser is allowed to switch to any other user. If this assumption does
-  not hold: you'll need to submit a pull request... Sorry :(
+* Any superuser is allowed to switch to any other user. *If this assumption does
+  not hold*: you'll need to submit a pull request... Sorry :(
 
 
 Installation
