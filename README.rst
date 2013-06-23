@@ -8,21 +8,14 @@ temporarily switch to another account by visiting ``/su``.
 Assumptions
 -----------
 
-Because ``django-switchuser`` was a quick project, it does make a couple
-of assumptions:
+Because ``django-switchuser`` was a quick project, it does make one assumption:
 
-* Your site uses a ``base.html`` template with a ``{% block content %}`` block.
-  *If this assumption does not hold*: you will need to define your own
-  ``su/login.html`` template, something like this::
-
-    {% extends "yourbase.html" %}
-    {% block yourcontent %}
-        {% include "su/login_form.html" %}
-    {% endblock %}
+* If a user is not allowed to su, then they will get an HTTP 404 if they try
+  to visit ``/su/`` or do anything su-related.
 
 * Any superuser is allowed to switch to any other user. *If this assumption does
-  not hold*: you'll need to submit a pull request... Sorry :(
-
+  not hold*: you'll need to submit a pull request (hint: take a look at
+  ``django_switchuser/state.py``)... Sorry :(
 
 Installation
 ------------
@@ -60,14 +53,21 @@ Installation
         ...
     )
 
-4. (Optional) Add an entry to your ``base.html`` template (don't use a
-   ``base.html``? See Assumptions_!) which will show a convenient logout
-   button::
+4. Start the server and check that everything is working by visiting
+   http://localhost:8000/su/ *Note*: an HTTP 404 will be returned if the
+   currently logged in user isn't allowed to su (by default, only
+   administrators are allowed to su).
 
-    <body>
-        ...
-        {% include "su/statusbar.html" %}
-    </body>
+5. (Optional) Add an entry to your ``base.html`` template which will show a
+   convenient logout button::
+
+    <html>
+        <head>...</head>
+        <body>
+            ...
+            {% include "su/statusbar.html" %}
+        </body>
+    </html>
 
 
 Doing Your Own Thing

@@ -2,8 +2,7 @@ import logging
 import urlparse
 
 from django.http import HttpResponseRedirect, Http404
-
-from ensi_common.django.shortcuts import r2r
+from django.shortcuts import render
 
 log = logging.getLogger(__name__)
 
@@ -33,7 +32,7 @@ def su_login(request):
     if request.method == "POST":
         request.su_state.set_su_user_id(request.POST["user_id"])
         return redirect_next(request)
-    return r2r(request, "su/login.html", {
+    return render(request, "su/login.html", {
         "current_user": request.user,
         "next": guess_next(request),
     })
@@ -43,6 +42,6 @@ def su_logout(request):
     if request.method == "POST":
         request.su_state.clear_su()
         return redirect_next(request)
-    return r2r(request, "su/logout.html", {
+    return render(request, "su/logout.html", {
         "next": guess_next(request),
     })

@@ -1,4 +1,8 @@
 <form method="POST" action="{% url su-logout %}?next={{ next }}">
-  <input type="submit" value="Un-su! (back to {{ su_state.auth_user.username }})" />
+  {% csrf_token %}
+  {% if su_state.is_active %}
+    <input type="submit" value="Un-su! (back to {{ su_state.auth_user.username }})" />
+  {% else %}
+    <input type="submit" value="Un-su! (su not active)" disabled="disabled" />
+  {% endif %}
 </form>
-

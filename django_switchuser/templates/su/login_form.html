@@ -1,14 +1,25 @@
-{% if su_state.is_active %}
+{% if not su_state %}
   <p>
-    Currently logged in as: <em>{{ current_user.username }} ({{ current_user.get_full_name }})</em>
+    Error: the <tt>su_state</tt> context processor was not found. Is
+    <tt>"django_switchuser.context_processors.su_state"</tt> in your list
+    of <tt>TEMPLATE_CONTEXT_PROCESSORS</tt>?
   </p>
+{% else %}
+  {% if su_state.is_active %}
+    <p>
+      Currently logged in as: <em>{{ current_user.username }} ({{ current_user.get_full_name }})</em>
+    </p>
+  {% endif %}
+  <form method="POST" action="{% url su-login %}?next={{ next }}">
+    {% csrf_token %}
+    <label for="user_id">Login as:</label>
+    <select name="user_id">
+      {% for user in su_state.available_users %}
+        <option value="{{ user.id }}">{{ user.username }} ({{ user.get_full_name }})</option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="su!" />
+  </form>
+
+  {% include "su/logout_form.html" %}
 {% endif %}
-<form method="POST" action="{% url su-login %}?next={{ next }}">
-  <label for="user_id">Login as:</label>
-  <select name="user_id">
-    {% for user in su_state.available_users %}
-      <option value="{{ user.id }}">{{ user.username }} ({{ user.get_full_name }})</option>
-    {% endfor %}
-  </select>
-  <input type="submit" value="su!" />
-</form>

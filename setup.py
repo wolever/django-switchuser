@@ -9,7 +9,7 @@ from setuptools import setup, find_packages
 
 import django_switchuser
 
-version = "%s.%s.%s%s" %django_switchuser.__version__
+version = "%s.%s.%s" %django_switchuser.__version__
 setup(
     name="django-switchuser",
     version=version,
