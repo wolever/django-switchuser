@@ -33,7 +33,7 @@
       })();
     </script>
     <button class="su-statusbar-hide" onclick="su_statusbar_hide_clicked()">&gt;</button><!--
-    --><form action="{% url su-logout %}" method="post"><!--
+    --><form action="{% url su-logout %}" method="post">{% csrf_token %}<!--
       --><input type="submit"
             value="Logout of {{ su_state.active_user.username }}"
             class="su-statusbar-logout" /><!--
