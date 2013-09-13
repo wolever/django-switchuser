@@ -14,6 +14,8 @@ setup(
     name="django-switchuser",
     version=version,
     url="https://github.com/wolever/django-switchuser",
+    author="David Wolever",
+    author_email="david@wolever.net",
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
