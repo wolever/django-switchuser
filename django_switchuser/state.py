@@ -33,7 +33,13 @@ class SuState(object):
         return self.auth_user.is_superuser
 
     def available_users(self):
-        return User.objects.all()
+        return User.objects.all().order_by("username")
+
+    def user_long_label(self, user):
+        return "%s (%s <%s>)" %(user.username, user.get_full_name(), user.email)
+
+    def user_short_label(self, user):
+        return user.username
 
     def set_su_user_id(self, su_user_id):
         su_user = self.available_users().get(id=su_user_id)

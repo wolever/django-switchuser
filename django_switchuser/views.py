@@ -33,7 +33,6 @@ def su_login(request):
         request.su_state.set_su_user_id(request.POST["user_id"])
         return redirect_next(request)
     return render(request, "su/login.html", {
-        "current_user": request.user,
         "next": guess_next(request),
     })
 
