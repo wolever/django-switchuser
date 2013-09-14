@@ -9,6 +9,11 @@ from setuptools import setup, find_packages
 
 import django_switchuser
 
+try:
+    long_description = open("README.rst", "U").read()
+except IOError:
+    long_description = "See https://github.com/wolever/pip2pi"
+
 version = "%s.%s.%s" %django_switchuser.__version__
 setup(
     name="django-switchuser",
@@ -16,6 +21,7 @@ setup(
     url="https://github.com/wolever/django-switchuser",
     author="David Wolever",
     author_email="david@wolever.net",
+    long_description=long_description,
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
