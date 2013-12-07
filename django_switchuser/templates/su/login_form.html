@@ -1,4 +1,5 @@
 {% load switchuser %}
+{% load url from future %}
 
 {% if not su_state %}
   <p>
@@ -12,7 +13,7 @@
       Currently logged in as: <em>{% su_user_short_label su_state.active_user %}</em>
     </p>
   {% endif %}
-  <form method="POST" action="{% url su-login %}?next={{ next }}">
+  <form method="POST" action="{% url "su-login" %}?next={{ next }}">
     {% csrf_token %}
     <label for="user_id">Login as:</label>
     <select name="user_id">
