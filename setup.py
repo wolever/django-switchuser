@@ -12,7 +12,7 @@ import django_switchuser
 try:
     long_description = open("README.rst", "U").read()
 except IOError:
-    long_description = "See https://github.com/wolever/pip2pi"
+    long_description = "https://github.com/wolever/django-switchuser"
 
 version = "%s.%s.%s" %django_switchuser.__version__
 setup(
