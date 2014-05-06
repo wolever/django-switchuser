@@ -1,4 +1,4 @@
 def su_state(request):
     return {
-        "su_state": request.su_state,
+        "su_state": getattr(request, "su_state", None),
     }
