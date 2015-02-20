@@ -59,5 +59,5 @@ class SuState(object):
         self._reset()
 
     def clear_su(self):
-        self.set_su_user_id(self.auth_user.id)
+        self.set_su_user(self.auth_user)
 

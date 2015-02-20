@@ -55,7 +55,8 @@ def su_login(request):
     })
 
 def su_logout(request):
-    check_su(request)
+    if not request.su_state.is_active():
+        check_su(request)
     if request.method == "POST":
         request.su_state.clear_su()
         default_next = request.session.pop("su_logout_next", None)
