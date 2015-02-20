@@ -145,7 +145,11 @@ attributes:
                 return "%s" %(user.get_profile().client_id, )
 
     ``SuState.set_su_user_id(su_user_id)``:
-        Switches to the user with id ``su_user_id``.
+        Switches to the user with id ``su_user_id`` if they are included in
+        ``SuState.available_users()``.
+
+    ``SuState.set_su_user(su_user)``:
+        Switches to User ``su_user``. No permissions checks are performed.
 
     ``SuState.clear_su()``:
         Reverts back to the original user.

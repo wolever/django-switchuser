@@ -42,9 +42,15 @@ class SuState(object):
         return user.username
 
     def set_su_user_id(self, su_user_id):
+        """ Switches to user ID ``su_user_id`` if they are one of the users
+            returned by ``available_users()``. """
         su_user = self.available_users().get(id=su_user_id)
+        self.set_su_user(su_user)
+
+    def set_su_user(self, su_user):
+        """ Switches to user ``su_user`` without permissions checks. """
         self.request.session[AUTH_SESSION_KEY] = su_user.id
-        if su_user_id != self.auth_user.id:
+        if su_user.id != self.auth_user.id:
             self.request.session["su_auth_user_id"] = self.auth_user.id
         else:
             self.request.session.pop("su_auth_user_id", None)
