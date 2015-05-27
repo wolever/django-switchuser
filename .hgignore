@@ -16,3 +16,4 @@ tags
 env/
 .env/
 *egg-info*
+build/
