@@ -1,7 +1,7 @@
 import logging
 
 from django.contrib.auth import SESSION_KEY as AUTH_SESSION_KEY
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 log = logging.getLogger(__name__)
 
@@ -11,6 +11,8 @@ class SuState(object):
         self._reset()
 
     def _reset(self):
+        User = get_user_model()
+
         self.old_user = None
         self.active_user = None
         current_user = self.request.user
@@ -33,7 +35,7 @@ class SuState(object):
         return self.auth_user.is_superuser
 
     def available_users(self):
-        return User.objects.all().order_by("username")
+        return get_user_model().objects.all().order_by("username")
 
     def user_long_label(self, user):
         return "%s (%s <%s>)" %(user.username, user.get_full_name(), user.email)
