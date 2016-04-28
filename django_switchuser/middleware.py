@@ -1,7 +1,7 @@
 import sys
 
 from django.conf import settings as s
-from django.utils.importlib import import_module
+from importlib import import_module
 
 class SuStateMiddleware(object):
     su_state_fqcn = getattr(s, "SU_STATE_CLASS", "django_switchuser.state.SuState")
