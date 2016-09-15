@@ -1,3 +1,7 @@
+0.5.0 (2016-08-11)
+    * Lazy load su_state so it can safely be listed first in
+      MIDDLEWARE_CLASSES
+
 0.4.1 (2016-05-03)
     * Allow custom user models and add Django 1.9 compatibility (thanks
       @garyayo; https://github.com/wolever/django-switchuser/pull/5)

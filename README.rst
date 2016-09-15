@@ -21,8 +21,9 @@ Installation
 ------------
 
 1. ``pip install django-switchuser``
-2. Add a few things to ``settings.py`` (note: the ``SuStateMiddleware`` must
-   appear *after* the ``AuthenticationMiddleware``)::
+2. Add a few things to ``settings.py`` (note: the ``SuStateMiddleware`` should
+   be the *very first* class in the list; this guarantees that
+   ``request.su_state`` will always be available)::
 
     INSTALLED_APPS = (
         ...
@@ -31,9 +32,6 @@ Installation
     )
 
     MIDDLEWARE_CLASSES = (
-        ...
-        "django.contrib.sessions.middleware.SessionMiddleware",
-        "django.contrib.auth.middleware.AuthenticationMiddleware",
         "django_switchuser.middleware.SuStateMiddleware",
         ...
     )
