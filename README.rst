@@ -17,6 +17,11 @@ Because ``django-switchuser`` was a quick project, it does make one assumption:
   not hold*: you'll need to submit a pull request (hint: take a look at
   ``django_switchuser/state.py``)... Sorry :(
 
+Compatibility
+-------------
+
+Tested with Django 1.8 through 1.10, should work with earlier Django versions too.
+
 Installation
 ------------
 

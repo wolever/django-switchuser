@@ -1,3 +1,9 @@
+0.5.1 (2017-02-03)
+    * Use AnonymousUser for SuState.auth_user instead of crashing if
+      request.user is not set.
+    * Fix Django 1.10 compatibility (thanks @mokutsu;
+      https://github.com/wolever/django-switchuser/pull/6)
+
 0.5.0 (2016-08-11)
     * Lazy load su_state so it can safely be listed first in
       MIDDLEWARE_CLASSES
