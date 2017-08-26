@@ -10,48 +10,50 @@ log = logging.getLogger(__name__)
 class SuState(object):
     def __init__(self, request):
         self.request = request
-        self._needs_reset = True
+        self._last_old_user_id = object()
 
-    def _reset(self):
-        self._needs_reset = False
-        User = get_user_model()
-
-        self._old_user = None
-        self._active_user = None
+    def _get_old_user_id(self):
         try:
-            current_user = self.request.user
+            session = self.request.session
         except AttributeError:
-            self._needs_reset = True
-            current_user = AnonymousUser()
-        old_user_id = self.request.session.get("su_auth_user_id", None)
-        if old_user_id is not None:
-            try:
-                self._old_user = User.objects.get(id=old_user_id)
-                self._active_user = current_user
-            except User.DoesNotExist as e:
-                log.warning("invalid su_auth_user_id in session for %r: "
-                            "%r (reason: %r)", current_user, old_user_id, e)
-                self.request.session.pop("su_auth_user_id", None)
-                self.request.session.save()
-        self._auth_user = self._old_user or current_user
+            return None
+        return session.get("su_auth_user_id", None)
 
     @property
     def old_user(self):
-        if self._needs_reset:
-            self._reset()
+        old_user_id = self._get_old_user_id()
+        if old_user_id is None:
+            return None
+
+        if old_user_id != self._last_old_user_id:
+            User = get_user_model()
+            self._last_old_user_id = old_user_id
+            try:
+                self._old_user = User.objects.get(id=old_user_id)
+            except User.DoesNotExist as e:
+                log.warning("invalid su_auth_user_id in session for %r: "
+                            "%r (reason: %r)", self.auth_user, old_user_id, e)
+                self.request.session.pop("su_auth_user_id", None)
+                self.request.session.save()
+                self._old_user = None
+
         return self._old_user
 
     @property
     def auth_user(self):
-        if self._needs_reset:
-            self._reset()
-        return self._auth_user
+        if self._get_old_user_id() is None:
+            try:
+                return self.request.user
+            except AttributeError:
+                return AnonymousUser()
+        return self.old_user
 
     @property
     def active_user(self):
-        if self._needs_reset:
-            self._reset()
-        return self._active_user
+        try:
+            return self.request.user
+        except AttributeError:
+            return AnonymousUser()
 
     def is_active(self):
         return self.active_user is not None
@@ -84,7 +86,6 @@ class SuState(object):
             self.request.session.pop("su_auth_user_id", None)
         self.request.session.save()
         self.request.user = su_user
-        self._needs_reset = True
 
     def clear_su(self):
         self.request.session[AUTH_HASH_SESSION_KEY] = self.auth_user.get_session_auth_hash()

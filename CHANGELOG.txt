@@ -1,3 +1,12 @@
+0.6.0 (2017-08-25)
+    * Don't cache the old or active user to guarantee that SuState.auth_user
+      and SuState.active_user are always valid, even if ``request.user``
+      or ``request.session["su_auth_user_id"]`` changes. This also lazy-loads
+      SuState.old_user, which will improve performance for requests where it
+      isn't used.
+    * The internal API has been changed, hence the minor version bump. There
+      is no change to the external API.
+
 0.5.1 (2017-02-03)
     * Use AnonymousUser for SuState.auth_user instead of crashing if
       request.user is not set.
