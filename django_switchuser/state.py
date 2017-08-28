@@ -50,13 +50,15 @@ class SuState(object):
 
     @property
     def active_user(self):
+        if self._get_old_user_id() is None:
+            return None
         try:
             return self.request.user
         except AttributeError:
             return AnonymousUser()
 
     def is_active(self):
-        return self.active_user is not None
+        return self._get_old_user_id() is not None
 
     def can_su(self):
         return self.auth_user.is_superuser

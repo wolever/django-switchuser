@@ -1,3 +1,6 @@
+0.6.1 (2017-08-28)
+    * Fix bug causing su_state to always appear to be active.
+
 0.6.0 (2017-08-25)
     * Don't cache the old or active user to guarantee that SuState.auth_user
       and SuState.active_user are always valid, even if ``request.user``
