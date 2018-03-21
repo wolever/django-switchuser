@@ -1,11 +1,18 @@
 {% load switchuser %}
 {% load url from future %}
 
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script
+        src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+
 <form method="POST" action="{% url "su-logout" %}?next={{ next }}">
   {% csrf_token %}
   {% if su_state.is_active %}
-    <input type="submit" value="Un-su! (back to {% su_user_short_label su_state.auth_user %})" />
+    <input type="submit" value="Revert User (back to {% su_user_short_label su_state.auth_user %})" />
   {% else %}
-    <input type="submit" value="Un-su! (su not active)" disabled="disabled" />
+    <input type="submit" value="Revert User (switch user not active)" disabled="disabled" />
   {% endif %}
 </form>
