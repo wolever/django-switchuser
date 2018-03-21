@@ -3,7 +3,7 @@ import logging
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import SESSION_KEY as AUTH_SESSION_KEY
-from django.contrib.auth import HASH_SESSION_KEY as AUTH_HASH_SESSION_KEY
+# from django.contrib.auth import HASH_SESSION_KEY as AUTH_HASH_SESSION_KEY
 
 log = logging.getLogger(__name__)
 
@@ -81,7 +81,7 @@ class SuState(object):
     def set_su_user(self, su_user):
         """ Switches to user ``su_user`` without permissions checks. """
         self.request.session[AUTH_SESSION_KEY] = su_user.id
-        self.request.session[AUTH_HASH_SESSION_KEY] = su_user.get_session_auth_hash()
+        # self.request.session[AUTH_HASH_SESSION_KEY] = su_user.get_session_auth_hash()
         if su_user.id != self.auth_user.id:
             self.request.session["su_auth_user_id"] = self.auth_user.id
         else:
@@ -90,5 +90,5 @@ class SuState(object):
         self.request.user = su_user
 
     def clear_su(self):
-        self.request.session[AUTH_HASH_SESSION_KEY] = self.auth_user.get_session_auth_hash()
+        # self.request.session[AUTH_HASH_SESSION_KEY] = self.auth_user.get_session_auth_hash()
         self.set_su_user(self.auth_user)
