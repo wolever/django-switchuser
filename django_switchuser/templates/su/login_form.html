@@ -1,41 +1,28 @@
 {% load switchuser %}
 {% load url from future %}
 
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script
-        src="https://code.jquery.com/jquery-3.3.1.js"
-        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-        crossorigin="anonymous"></script>
-
 {% if not su_state %}
-    <div align="center" class="alert alert-danger">
-        <p>
-            Error: the <tt>su_state</tt> context processor was not found. Is
-            <tt>"django_switchuser.context_processors.su_state"</tt> in your list
-            of <tt>TEMPLATE_CONTEXT_PROCESSORS</tt>?
-        </p>
-    </div>
+  <p>
+    Error: the <tt>su_state</tt> context processor was not found. Is
+    <tt>"django_switchuser.context_processors.su_state"</tt> in your list
+    of <tt>TEMPLATE_CONTEXT_PROCESSORS</tt>?
+  </p>
 {% else %}
-    <div class="jumbotron">
-        <h1>Switch Users</h1>
-        <hr />
-        {% if su_state.is_active %}
-            <div class="alert alert-success">
-                Currently logged in as: <em>{% su_user_short_label su_state.active_user %}</em>
-            </div>
-        {% endif %}
-        <form method="POST" action="{% url "su-login" %}?next={{ next }}">
-        {% csrf_token %}
-        <label for="user_id">Login as:</label>
-        <select name="user_id">
-            {% for user in su_state.available_users %}
-                <option value="{{ user.id }}">{% su_user_long_label user %}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Switch User"/>
-        </form>
+  {% if su_state.is_active %}
+    <p>
+      Currently logged in as: <em>{% su_user_short_label su_state.active_user %}</em>
+    </p>
+  {% endif %}
+  <form method="POST" action="{% url "su-login" %}?next={{ next }}">
+    {% csrf_token %}
+    <label for="user_id">Login as:</label>
+    <select name="user_id">
+      {% for user in su_state.available_users %}
+        <option value="{{ user.id }}">{% su_user_long_label user %}</option>
+      {% endfor %}
+    </select>
+    <input type="submit" value="su!" />
+  </form>
 
-        {% include "su/logout_form.html" %}
-    </div>
+  {% include "su/logout_form.html" %}
 {% endif %}
