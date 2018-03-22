@@ -5,7 +5,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import SESSION_KEY as AUTH_SESSION_KEY
 try:
     from django.contrib.auth import HASH_SESSION_KEY as AUTH_HASH_SESSION_KEY
-except ModuleNotFoundError:
+except:
     AUTH_HASH_SESSION_KEY = '_auth_user_hash'
 
 log = logging.getLogger(__name__)
