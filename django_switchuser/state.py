@@ -3,9 +3,13 @@ import logging
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import SESSION_KEY as AUTH_SESSION_KEY
-from django.contrib.auth import HASH_SESSION_KEY as AUTH_HASH_SESSION_KEY
+try:
+    from django.contrib.auth import HASH_SESSION_KEY as AUTH_HASH_SESSION_KEY
+except ImportError:
+    AUTH_HASH_SESSION_KEY = '_auth_user_hash'
 
 log = logging.getLogger(__name__)
+
 
 class SuState(object):
     def __init__(self, request):
